@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useState } from 'react'
+
+import DefaultContainer from './components/DefaultContainer'
+import HomeScreen from './components/home/HomeScreen'
+import ResultsScreen from './components/results/ResultsScreen'
 
 function App() {
+  const [results, setResults] = useState({})
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<DefaultContainer/>}>
+          <Route index element={<HomeScreen setResults={setResults} />}/>
+          <Route path='results' element={<ResultsScreen results={results} />}/>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
