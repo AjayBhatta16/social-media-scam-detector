@@ -5,11 +5,10 @@ import Header from '../common/Header'
 export default function HomeScreen(props) {
     const headStyle = {
         color: '#0fdce3',
-        fontFamily: 'monospace'
     }
     const btnStyle = {
-        color: '#ccc',
-        backgroundColor: 'darkblue',
+        color: '#222',
+        backgroundColor: '#0fdce3',
         borderRadius: '20%/50%'
     }
     const [errTxt, setErrTxt] = useState('')
@@ -31,12 +30,12 @@ export default function HomeScreen(props) {
             <Header/>
             <div className='container mt-5 pt-3 text-center'>
                 <h1 className='mt-5' style={{...headStyle}}>Social Media Scam Detector</h1>
-                <h6 className='mt-3' style={{...headStyle, fontWeight: '100'}}>
+                <h6 className='mt-3 mb-3' style={{...headStyle, fontWeight: '100'}}>
                     Enter the URL of a social media profile to scan it for fraud
                 </h6>
                 <input ref={urlRef} className='mt-5 mb-3 w-75 p-2' placeholder='Profile URL' type="text" />
                 <br/><small className='text-danger'>{errTxt}</small><br/>
-                <button onClick={handleClick} className='btn px-3 py-2 mt-2' style={btnStyle}>Scan Profile</button>
+                <button onClick={handleClick} className='btn px-3 py-2 mt-2 scan__button' style={btnStyle}>Scan Profile</button>
             </div>
         </>
     )
