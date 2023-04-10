@@ -24,10 +24,11 @@ h1 {
   font-size: 3rem;
 }
 
-h6, .scan__button, small, h2 {
+h6, .scan__button, small, h2, .para__desc {
   font-family: 'DM Mono', monospace;
 }
 
 h2 {
   font-weight: bold;
+  font-size: 1.6rem;
 }

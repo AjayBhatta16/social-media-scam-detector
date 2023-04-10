@@ -21,7 +21,8 @@ export default function HomeScreen(props) {
         }
         props.setResults({
             score: 75,
-            scamType: 'Account Recovery'
+            scamType: 'Account Recovery',
+            description: 'Tech support scams involve scammers posing as tech support professionals who claim to fix technical problems with a victim\'s computer or software. The scammers trick the victim into paying for the fake services or giving remote access to their device.'
         })
         navigate('results')
     }
