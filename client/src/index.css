@@ -24,6 +24,10 @@ h1 {
   font-size: 3rem;
 }
 
-h6, .scan__button, small {
+h6, .scan__button, small, h2 {
   font-family: 'DM Mono', monospace;
+}
+
+h2 {
+  font-weight: bold;
 }

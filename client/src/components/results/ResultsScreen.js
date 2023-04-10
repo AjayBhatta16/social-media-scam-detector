@@ -1,28 +1,53 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import Header from "../common/Header"
+import Arc from "./Arc"
 
 export default function ResultsScreen(props) {
-    const getFraudString = (score) => {
-        if(score < 25) {
-            return "This account has a very low fraud risk"
-        } 
-        if(score < 50) {
-            return "This account has a fairly low fraud risk"
+    const containerStyle = {
+        borderRadius: '5px'
+    }
+    const getPercentSpanStyle = score => {
+        let hue = 150 - 150*(score/100)
+        return {
+            color: `hsl(${hue}, 100%, 50%)`
         }
-        if(score < 75) {
-            return "This account has a moderate fraud risk"
-        } 
-        return "This account has a high fraud risk"
+    }
+    const navigate = useNavigate()
+    useEffect(() => {
+        if(!props.results.score) {
+            console.log('back')
+            navigate('/')
+        }
+    })
+    const getFraudString = (score) => {
+        if(score == 0) return "legitimate"
+        if(score < 10) return "most likely safe"
+        if(score < 20) return "probably safe"
+        if(score < 30) return "moderately safe"
+        if(score < 40) return "somewhat safe"
+        if(score < 50) return "questionable"
+        if(score < 60) return "somewhat suspicious"
+        if(score < 70) return "moderately suspicious"
+        if(score < 80) return "suspicious"
+        if(score < 90) return "very suspicious"
+        if(score < 100) return "most likely a scam"
+        return "definitely a scam"
     }
     return (
         <>
             <Header/>
-            <div className="container mt-5 pt-3 pb-5 bg-dark text-white">
+            <div style={containerStyle} className="container mt-5 pt-3 pb-5 bg-dark text-white">
                 <div className="text-center">
                     <h1 className="font-weight-light text-underline mb-4">Scan Results</h1>
                 </div>
-                <h2>Fraud risk: {props.results.score}%</h2>
-                <h6>{getFraudString(props.results.score)}</h6>
+                <div className="d-flex flex-row">
+                    <Arc score={props.results.score}/>
+                    <div className="d-flex flex-column">
+                        <h2>Fraud risk: <span style={getPercentSpanStyle(props.results.score)}>{props.results.score}%</span></h2>
+                        <h6 style={getPercentSpanStyle(props.results.score)}>This account is {getFraudString(props.results.score)}</h6>   
+                    </div>
+                </div>
                 <h2 className="mt-5">Scam Type: {props.results.scamType}</h2>
             </div>
         </>
