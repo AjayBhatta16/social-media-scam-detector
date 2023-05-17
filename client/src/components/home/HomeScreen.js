@@ -19,12 +19,27 @@ export default function HomeScreen(props) {
             setErrTxt("Please enter a social media profile URL")
             return 
         }
-        props.setResults({
-            score: 75,
-            scamType: 'Account Recovery',
-            description: 'Tech support scams involve scammers posing as tech support professionals who claim to fix technical problems with a victim\'s computer or software. The scammers trick the victim into paying for the fake services or giving remote access to their device.'
+        fetch('/scan', {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({url: urlRef.current.value})
+        }).then(res => {
+            return res.json()
+        }).then(res => {
+            console.log(res)
+            if(res.status=="400") {
+                setErrTxt(res.message)
+            } else {
+                props.setResults({
+                    platform: res.platform,
+                    username: res.username,
+                    score: 75,
+                    scamType: 'Account Recovery',
+                    description: 'Tech support scams involve scammers posing as tech support professionals who claim to fix technical problems with a victim\'s computer or software. The scammers trick the victim into paying for the fake services or giving remote access to their device.'
+                })
+                navigate('results')
+            }
         })
-        navigate('results')
     }
     return (
         <>

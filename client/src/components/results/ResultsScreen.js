@@ -48,6 +48,7 @@ export default function ResultsScreen(props) {
                 <div className="text-center">
                     <h1 className="font-weight-light text-underline mb-4">Scan Results</h1>
                 </div>
+                <h2 className="mb-5">Detected Profile: <span style={scamTypeStyle}>{props.results.platform}/{props.results.username}</span></h2>
                 <div className="d-flex flex-row mb-3">
                     <Arc score={props.results.score}/>
                     <div className="ml-3 d-flex flex-column">
