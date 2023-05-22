@@ -1,0 +1,10 @@
+To get the scrapers running:
+1. Create a new file in this directory called config.py 
+2. Enter the following code, with your own access codes:
+
+twitter = {
+    "APIKey": "",
+    "APISecret": "",
+    "AccessToken": "",
+    "AccessSecret": ""
+}
