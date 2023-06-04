@@ -13,11 +13,11 @@ def scan_profile():
     data = json.loads(dataStr)
     url = data['url']
     profile = parse(url)
-    if profile.status >= 400:
+    if profile['status'] >= 400:
         return json.dumps(profile)
-    if profile.platform == 'twitter': 
-        return json.dumps(getTwitterProfile(profile.username))
-    if profile.platform == 'facebook':
+    if profile['platform'] == 'twitter': 
+        return json.dumps(getTwitterProfile(profile['username']))
+    if profile['platform'] == 'facebook':
         return json.dumps({
             "status": 425,
             "message": "Facebook scanning not yet available"

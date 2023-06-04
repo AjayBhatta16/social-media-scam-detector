@@ -1,24 +1,31 @@
-import tweepy
-from config import twitter
-
-twitterAPIKey = twitter["APIKey"]
-twitterAPISecret = twitter["APISecret"]
-twitterAccessToken = twitter["AccessToken"]
-twitterAccessSecret = twitter["AccessSecret"]
+from tweety.bot import Twitter 
+import json
+import time
 
 def getTwitterProfile(username):
-    auth = tweepy.OAuthHandler(twitterAPIKey, twitterAPISecret)
-    auth.set_access_token(twitterAccessToken, twitterAccessSecret)
-    api = tweepy.API(auth)
     try:
-        if username == "":
-            api.verify_credentials()
-            print('Successful authentication')
-        else:
-            api.verify_credentials()
-            user = api.get_user(screen_name=username)
+        user = Twitter().get_user_info(username)
+        return {
+            "status": 200,
+            "platform": "Twitter",
+            "username": username,
+            "data": {
+                "bio": user.bio,
+                "description": user.description,
+                "created_at": int(time.mktime(user.created_at.timetuple()))*1000,
+                "fast_followers_count": user.fast_followers_count,
+                "followers_count": user.followers_count,
+                "normal_followers_count": user.normal_followers_count,
+                "location": user.location,
+                "media_count": user.media_count,
+                "statuses_count": user.statuses_count,
+                "verified": user.verified,
+                "screen_name": user.screen_name,
+                "name": user.name
+            }
+        }
     except Exception as e:
-        print('failed authentication: '+str(e))
+        print('twitter scraping failed: '+str(e))
         return {
             "status": 400,
             "message": "Twitter scanning currently unavailable"
@@ -35,4 +42,4 @@ def testData():
 #testConnections()
 
 # Uncomment this line to examine return data
-testData()
+#testData()
