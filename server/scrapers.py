@@ -2,9 +2,15 @@ from tweety.bot import Twitter
 import json
 import time
 
+def getTweetDict(tweet):
+    return {
+        "text": tweet.text
+    }
+
 def getTwitterProfile(username):
     try:
         user = Twitter().get_user_info(username)
+        tweets = Twitter().get_tweets(username)
         return {
             "status": 200,
             "platform": "Twitter",
@@ -21,7 +27,8 @@ def getTwitterProfile(username):
                 "statuses_count": user.statuses_count,
                 "verified": user.verified,
                 "screen_name": user.screen_name,
-                "name": user.name
+                "name": user.name,
+                "tweets": [getTweetDict(tweet) for tweet in tweets]
             }
         }
     except Exception as e:
