@@ -6,6 +6,13 @@ from scrapers import getTwitterProfile
 
 app = Flask(__name__)
 
+@app.route('/', methods=['GET'])
+def test_server():
+    return json.dumps({
+        "status": 200,
+        "msg": "SocialGuard Flask Middleware Server"
+    })
+
 @app.route('/scan', methods=['POST'])
 def scan_profile():
     print("scanning...")
@@ -30,4 +37,4 @@ def scan_profile():
     return json.dumps(parse(url))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
