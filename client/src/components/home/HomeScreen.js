@@ -19,7 +19,7 @@ export default function HomeScreen(props) {
             setErrTxt("Please enter a social media profile URL")
             return 
         }
-        fetch('/scan', {
+        fetch('https://future-campaign-410806.uk.r.appspot.com/scan', {
             method: "POST",
             headers: {'Content-Type': 'application/json'}, 
             body: JSON.stringify({url: urlRef.current.value})
@@ -33,9 +33,9 @@ export default function HomeScreen(props) {
                 props.setResults({
                     platform: res.platform,
                     username: res.username,
-                    score: 75,
-                    scamType: 'Account Recovery',
-                    description: 'Tech support scams involve scammers posing as tech support professionals who claim to fix technical problems with a victim\'s computer or software. The scammers trick the victim into paying for the fake services or giving remote access to their device.'
+                    score: 50,
+                    scamType: 'ERROR: Our AI Pipelines are Currently Inactive',
+                    description: 'We are unable to analyze profiles at this time.'
                 })
                 navigate('results')
             }

@@ -47,4 +47,4 @@ def test():
         print(json.dumps(result))
 
 # Uncomment the following line to run test cases:
-# test()
+test()

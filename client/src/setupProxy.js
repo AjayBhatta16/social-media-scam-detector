@@ -4,7 +4,8 @@ module.exports = function(app) {
   app.use(
     '/scan',
     createProxyMiddleware({
-      target: 'http://127.0.0.1:5000',
+      target: 'https://future-campaign-410806.uk.r.appspot.com',
+      changeOrigin: true,
       secure: false
     })
   );
