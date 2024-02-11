@@ -1,0 +1,1 @@
+ gcloud functions deploy risk-score-api --runtime python39 --trigger-http --entry-point user_scam_risk --source .
