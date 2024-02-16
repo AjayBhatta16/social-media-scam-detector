@@ -6,6 +6,7 @@ from url_parser import parse
 # from scrapers import getTwitterProfile
 
 RISK_SCORE_URL = "https://us-central1-future-campaign-410806.cloudfunctions.net/risk-score-api"
+NLP_CLF_URL = "https://us-central1-future-campaign-410806.cloudfunctions.net/nlp-classifier-api"
 
 app = Flask(__name__)
 cors = CORS(app)

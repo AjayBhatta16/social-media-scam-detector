@@ -2,10 +2,11 @@ import joblib
 import pandas as pd 
 from google.cloud import storage
 from sklearn.pipeline import Pipeline
+import json
 
 storage_client = storage.Client()
 LOCAL_MODEL_PATH = "./log-reg-model.joblib"
-BUCKET_NAME = "gs://future-campaign-410806.appspot.com/",
+BUCKET_NAME = "gs://future-campaign-410806.appspot.com/"
 BUCKET_MODEL_PATH = "log-reg-model.joblib"
 
 """
