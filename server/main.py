@@ -7,6 +7,7 @@ from url_parser import parse
 
 RISK_SCORE_URL = "https://us-central1-future-campaign-410806.cloudfunctions.net/risk-score-api"
 NLP_CLF_URL = "https://us-central1-future-campaign-410806.cloudfunctions.net/nlp-classifier-api"
+MULTI_TWEET_URL = "https://us-central1-future-campaign-410806.cloudfunctions.net/multi-tweet-clf"
 
 app = Flask(__name__)
 cors = CORS(app)

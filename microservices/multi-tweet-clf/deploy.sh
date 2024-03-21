@@ -1,0 +1,1 @@
+ gcloud functions deploy multi-tweet-clf --runtime python39 --trigger-http --entry-point multitweet_clf --source .
