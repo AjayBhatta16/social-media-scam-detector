@@ -42,9 +42,43 @@ let types = [
     {
         name: "Spellcasting",
         description: "These scammers will set up fake profiles posing as spiritual doctors, offering to cast spells in exchange for a fee that covers the ingredients for the spell. They often offer a wide variety of spells, including spells that will make people fall in love, spells that cure disease, and spells that bring financial prosperity. "
+    },
+    {
+        name: 'Fake Follower',
+        description: 'This account has most likely been created for the purpose of inflating the number of likes or amount of engagement on another account. While these accounts are typically unresponsive, their impact may help scam accounts reach more victims.'
+    },
+    {
+        name: 'Political Spammer',
+        description: 'This account is most likely being used to spam political content. While the account may not be targeting people for wire fraud, they typically retweet specific canditates and activists, which could facilitate the spread of harmful misinformation.'
+    },
+    {
+        name: 'Promotional Spammer (Apps/Services)',
+        description: 'This account is most likely being used to spam promotions regarding apps and services. Many of these apps are created with the intent of committing malicious acts towards the people who download them, such as theft and unwanted device surveillance. Many of the services being promoted are malicious as well, including fake crypto-currency investment schemes and other online scams.'
+    },
+    {
+        name: 'Promotional Spammer (Products)',
+        description: 'This account is most likely being used to spam promotions regarding products for sale on sites such as Amazon. Many of these products are either fake, misleading, or produced in an unethical manner.'
+    },
+    {
+        name: 'Traditional Spam Account',
+        description: 'This account is most likely being used to spam content regarding malicious activity, such as fake job offers and scam URLs. The majority of scam accounts on major platforms today would fall under this category.'
+    },
+    {
+        name: 'Genuine User',
+        description: 'This account is most likely human-operated, and does not seem to be engaging in any fraudulent or misleading activities. However, you should still be cautious when engaging with this account, especially if the risk meter is high.'
     }
 ]
 
-export default function getScamType(typeName) {
+const csvToTypeName = {
+    'fake_followers_tweets.csv': 'Fake Follower',
+    'social_spambots_1_tweets.csv': 'Political Spammer',
+    'social_spambots_2_tweets.csv': 'Promotional Spammer (Apps/Services)',
+    'social_spambots_3_tweets.csv': 'Promotional Spammer (Products)',
+    'traditional_spambots_1_tweets.csv': 'Traditional Spam Account',
+    'genuine_accounts_tweets.csv': 'Genuine User'
+}
+
+export default function getScamType(csv) {
+    let typeName = csvToTypeName[csv]
     return types.filter(t => t.name==typeName)[0]
 }
