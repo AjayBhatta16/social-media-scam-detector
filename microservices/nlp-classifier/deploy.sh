@@ -1,1 +1,1 @@
-gcloud functions deploy nlp-classifier-api --runtime python39 --trigger-http --entry-point meta_clf_pipeline --source .
+gcloud functions deploy nlp-classifier-api --runtime python39 --trigger-http --entry-point nlp_classifier --source .

@@ -26,10 +26,11 @@ NLP Meta-Classifier Microservice
 Expected Input Format: 
 data: {
     text
-    retweet_count
-    favorite_count
-    num_hashtags
-    num_urls
+    use_knn
+    retweet_count   ?
+    favorite_count  ?
+    num_hashtags    ?
+    num_urls        ?
 }
 
 Expected Output Format:
@@ -38,13 +39,7 @@ Expected Output Format:
 }
 """
 verbose=False
-def meta_clf_pipeline(request):
-    # Parse request data
-    request_json = request.json()
-    if not request_json or 'data' not in request_json:
-        return 'No data provided', 400
-    tweet = request_json['data']
-
+def meta_clf_pipeline(tweet):
     # Initialize bucket client
     bucket = storage_client.bucket(BUCKET_NAME)
 
@@ -106,3 +101,33 @@ def meta_clf_pipeline(request):
     # return predictions
     function_response = json.dumps({"scam_type": meta_predictions[0]})
     return function_response, 200, {'Content-Type': 'application/json'}
+
+def nlp_only_pipeline(tweet):
+     # Initialize bucket client
+    bucket = storage_client.bucket(BUCKET_NAME)
+
+    # download binaries from cloud storage
+    os.makedirs(os.path.dirname(AI_FUNCTION_ITEMS["DISTILBERT_FOLDER"]), exist_ok=True)
+    blob_list = bucket.list_blobs(AI_FUNCTION_ITEMS["DISTILBERT_FOLDER"])
+    for blob in blob_list:
+        file_name = blob.name.split("/")[0]
+        blob.download_to_filename(f'./{AI_FUNCTION_ITEMS["DISTILBERT_FOLDER"]}/{file_name}')
+    
+    # distilbert prediction
+    nlp_model = pipeline(task="text-classification", model="/content/drive/MyDrive/scam-detector/distilbert")
+    nlp_predictions_raw = nlp_model([tweet])
+    nlp_predictions = [p['label'] for p in nlp_predictions_raw]
+    
+    # http response
+    function_response = json.dumps({"scam_type": nlp_predictions[0]})
+    return function_response, 200, {'Content-Type': 'application/json'}
+
+def nlp_classifier(request):
+    # Parse request data
+    request_json = request.json()
+    if not request_json or 'data' not in request_json:
+        return 'No data provided', 400
+    tweet = request_json['data']
+
+    # check use_knn and route to pipeline
+    return nlp_only_pipeline(tweet) if tweet['use_knn'] else meta_clf_pipeline(tweet)
