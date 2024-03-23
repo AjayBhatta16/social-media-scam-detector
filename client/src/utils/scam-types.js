@@ -66,6 +66,10 @@ let types = [
     {
         name: 'Genuine User',
         description: 'This account is most likely human-operated, and does not seem to be engaging in any fraudulent or misleading activities. However, you should still be cautious when engaging with this account, especially if the risk meter is high.'
+    },
+    {
+        name: 'Unknown',
+        description: 'Due to lack of data, we are unable to determine what type of user this account is associated with. Please proceed with caution when engaging with this account.'
     }
 ]
 
@@ -75,10 +79,11 @@ const csvToTypeName = {
     'social_spambots_2_tweets.csv': 'Promotional Spammer (Apps/Services)',
     'social_spambots_3_tweets.csv': 'Promotional Spammer (Products)',
     'traditional_spambots_1_tweets.csv': 'Traditional Spam Account',
-    'genuine_accounts_tweets.csv': 'Genuine User'
+    'genuine_accounts_tweets.csv': 'Genuine User',
+    'unknown': 'Unknown'
 }
 
-export default function getScamType(csv) {
+export function getScamType(csv) {
     let typeName = csvToTypeName[csv]
     return types.filter(t => t.name==typeName)[0]
 }

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../common/Header'
+import { getScamType } from '../../utils/scam-types'
 
 export default function HomeScreen(props) {
     const headStyle = {
@@ -30,13 +31,25 @@ export default function HomeScreen(props) {
             if(res.status=="400") {
                 setErrTxt(res.message)
             } else {
-                props.setResults({
-                    platform: res.platform,
-                    username: res.username,
-                    score: 50,
-                    scamType: 'ERROR: Our AI Pipelines are Currently Inactive',
-                    description: 'We are unable to analyze profiles at this time.'
-                })
+                console.log(res)
+                if (res.riskScore) {
+                    let scamType = getScamType(res.type)
+                    props.setResults({
+                        platform: res.platform,
+                        username: res.username,
+                        score: res.riskScore,
+                        scamType: scamType.name,
+                        description: scamType.description
+                    })
+                } else {
+                    props.setResults({
+                        platform: res.platform,
+                        username: res.username,
+                        score: 50,
+                        scamType: 'ERROR: Our AI Pipelines are Currently Inactive',
+                        description: 'We are unable to analyze profiles at this time.'
+                    })
+                }
                 navigate('results')
             }
         })
