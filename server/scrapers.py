@@ -7,6 +7,9 @@ def getTweetDict(tweet):
         "text": tweet.text
     }
 
+def getTweet(tweet_id):
+    pass
+
 def getTwitterProfile(username):
     try:
         user = Twitter().get_user_info(username)
