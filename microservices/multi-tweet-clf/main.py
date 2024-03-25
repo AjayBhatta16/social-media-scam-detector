@@ -5,7 +5,7 @@ from sklearn.pipeline import Pipeline
 import json
 
 storage_client = storage.Client()
-LOCAL_MODEL_PATH = "./multitweet-clf-nb.joblib"
+LOCAL_MODEL_PATH = "/tmp/multitweet-clf-nb.joblib"
 BUCKET_NAME = "gs://future-campaign-410806.appspot.com/"
 BUCKET_MODEL_PATH = "multitweet-clf-nb.joblib"
 
@@ -40,7 +40,7 @@ Expected Output Format:
 """
 def multitweet_clf(request):
     # parse request data
-    request_json = request.json()
+    request_json = json.loads(request.json)
     if not request_json or 'data' not in request_json:
         return 'No data provided', 400
     req_data = request_json['data']

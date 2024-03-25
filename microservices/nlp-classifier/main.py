@@ -8,7 +8,7 @@ from google.cloud import storage
 import json 
 import os 
 
-BUCKET_NAME = "gs://future-campaign-410806.appspot.com/"
+BUCKET_NAME = "future-campaign-410806.appspot.com"
 AI_FUNCTION_ITEMS = {
     "KNN_SCALER": "knn-standard-scaler.bin",
     "KNN_MODEL": "knn-model.joblib",
@@ -50,10 +50,10 @@ def meta_clf_pipeline(tweet):
             blob_list = bucket.list_blobs(v)
             for blob in blob_list:
                 file_name = blob.name.split("/")[0]
-                blob.download_to_filename(f"./{v}/{file_name}")
+                blob.download_to_filename(f"/tmp/{v}/{file_name}")
         else:
             blob = bucket.blob(v)
-            blob.download_to_filename(f"./{v}")
+            blob.download_to_filename(f"/tmp/{v}")
 
     # load local binaries
     if verbose:
@@ -107,14 +107,14 @@ def nlp_only_pipeline(tweet):
     bucket = storage_client.bucket(BUCKET_NAME)
 
     # download binaries from cloud storage
-    os.makedirs(os.path.dirname(AI_FUNCTION_ITEMS["DISTILBERT_FOLDER"]), exist_ok=True)
-    blob_list = bucket.list_blobs(AI_FUNCTION_ITEMS["DISTILBERT_FOLDER"])
+    os.makedirs(os.path.dirname(f'/tmp/distilbert'), exist_ok=True)
+    blob_list = bucket.list_blobs(prefix="distilbert")
     for blob in blob_list:
-        file_name = blob.name.split("/")[0]
-        blob.download_to_filename(f'./{AI_FUNCTION_ITEMS["DISTILBERT_FOLDER"]}/{file_name}')
+        file_name = blob.name.split("/")[-1]
+        blob.download_to_filename(f'/tmp/{file_name}')
     
     # distilbert prediction
-    nlp_model = pipeline(task="text-classification", model="/content/drive/MyDrive/scam-detector/distilbert")
+    nlp_model = pipeline(task="text-classification", model=f'/tmp')
     nlp_predictions_raw = nlp_model([tweet])
     nlp_predictions = [p['label'] for p in nlp_predictions_raw]
     
@@ -124,10 +124,10 @@ def nlp_only_pipeline(tweet):
 
 def nlp_classifier(request):
     # Parse request data
-    request_json = request.json()
+    request_json = json.loads(request.json)
     if not request_json or 'data' not in request_json:
         return 'No data provided', 400
     tweet = request_json['data']
 
     # check use_knn and route to pipeline
-    return nlp_only_pipeline(tweet) if tweet['use_knn'] else meta_clf_pipeline(tweet)
+    return meta_clf_pipeline(tweet) if tweet['use_knn'] else nlp_only_pipeline(tweet)

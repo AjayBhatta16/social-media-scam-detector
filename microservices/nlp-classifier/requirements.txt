@@ -4,3 +4,4 @@ pandas
 transformers
 scikit-learn
 google-cloud-storage
+torch

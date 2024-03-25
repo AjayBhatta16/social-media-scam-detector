@@ -5,8 +5,8 @@ from sklearn.pipeline import Pipeline
 import json
 
 storage_client = storage.Client()
-LOCAL_MODEL_PATH = "./log-reg-model.joblib"
-BUCKET_NAME = "gs://future-campaign-410806.appspot.com/"
+LOCAL_MODEL_PATH = "/tmp/log-reg-model.joblib"
+BUCKET_NAME = "future-campaign-410806.appspot.com"
 BUCKET_MODEL_PATH = "log-reg-model.joblib"
 
 """
@@ -31,7 +31,7 @@ Expected Output Format:
 """
 def user_scam_risk(request):
     # parse request data
-    request_json = request.json()
+    request_json = json.loads(request.json)
     if not request_json or 'data' not in request_json:
         return 'No data provided', 400
     twitter_user = request_json['data']
