@@ -83,6 +83,15 @@ def twitter_analyze(username):
         })
     risk_score = serverless_res.json()['risk_score']
 
+    if len(tweets) == 0:
+        return json.dumps({
+            "status": 200,
+            "platform": "Twitter",
+            "username": username,
+            "riskScore": round(risk_score * 100),
+            "type": "unknown"
+        })
+
     # classify with tweets
     multi_tweet_data = {
         'predictions': []
