@@ -6,7 +6,7 @@ import json
 
 storage_client = storage.Client()
 LOCAL_MODEL_PATH = "/tmp/multitweet-clf-nb.joblib"
-BUCKET_NAME = "gs://future-campaign-410806.appspot.com/"
+BUCKET_NAME = "future-campaign-410806.appspot.com"
 BUCKET_MODEL_PATH = "multitweet-clf-nb.joblib"
 
 categories = [
@@ -64,6 +64,6 @@ def multitweet_clf(request):
     model_input = pd.DataFrame.from_dict(model_input_obj, orient='index').T[model_input_columns]
 
     # predict
-    category = mt_model.predict(model_input)[0]
+    category = lr_model.predict(model_input)[0]
     function_response = json.dumps({"category": category})
     return function_response, 200, {'Content-Type': 'application/json'}

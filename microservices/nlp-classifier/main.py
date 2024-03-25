@@ -115,7 +115,7 @@ def nlp_only_pipeline(tweet):
     
     # distilbert prediction
     nlp_model = pipeline(task="text-classification", model=f'/tmp')
-    nlp_predictions_raw = nlp_model([tweet])
+    nlp_predictions_raw = nlp_model([{'text': tweet['text']}])
     nlp_predictions = [p['label'] for p in nlp_predictions_raw]
     
     # http response

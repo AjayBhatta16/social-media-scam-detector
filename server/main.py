@@ -6,8 +6,8 @@ import requests
 from url_parser import parse
 from scrapers import getTwitterProfile
 
-from google.auth import app_engine
-from google.cloud import functions_v1
+# from google.auth import app_engine
+# from google.cloud import functions_v1
 
 default_data = {
     'protected': False, 
@@ -27,12 +27,14 @@ default_data = {
     ]
 }
 
-CLOUD_SHELL_TESTING_FLAG = True
+CLOUD_SHELL_TESTING_FLAG = False
+"""
 if CLOUD_SHELL_TESTING_FLAG:
     function_cli = functions_v1.CloudFunctionsServiceClient()
 else: 
     gcp_credentials = app_engine.Credentials()
     function_cli = functions_v1.services.CloudFunctionsServiceClient(credentials=gcp_credentials)
+"""
 
 def call_gcp_serverless(url, data):
     data_json = json.dumps({ "data": data })
@@ -111,7 +113,7 @@ def twitter_analyze(username):
         "status": 200,
         "platform": "Twitter",
         "username": username,
-        "riskScore": risk_score,
+        "riskScore": round(risk_score * 100),
         "type": scam_type
     })
 
