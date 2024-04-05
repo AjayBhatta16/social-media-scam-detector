@@ -13,6 +13,7 @@ export default function HomeScreen(props) {
         borderRadius: '20%/50%'
     }
     const [errTxt, setErrTxt] = useState('')
+    const [buttonDisabled, setButtonDisabled] = useState(false)
     const urlRef = useRef()
     const navigate = useNavigate()
     const handleClick = () => {
@@ -20,6 +21,7 @@ export default function HomeScreen(props) {
             setErrTxt("Please enter a social media profile URL")
             return 
         }
+        setButtonDisabled(true)
         fetch('https://future-campaign-410806.uk.r.appspot.com/scan', {
             method: "POST",
             headers: {'Content-Type': 'application/json'}, 
@@ -30,6 +32,7 @@ export default function HomeScreen(props) {
             console.log(res)
             if(res.status=="400") {
                 setErrTxt(res.message)
+                setButtonDisabled(false)
             } else {
                 console.log(res)
                 if (res.riskScore) {
@@ -64,7 +67,14 @@ export default function HomeScreen(props) {
                 </h6>
                 <input ref={urlRef} className='mt-5 mb-3 w-75 p-2' placeholder='Profile URL' type="text" />
                 <br/><small className='text-danger'>{errTxt}</small><br/>
-                <button onClick={handleClick} className='btn px-3 py-2 mt-2 scan__button' style={btnStyle}>Scan Profile</button>
+                <button 
+                    onClick={handleClick} 
+                    disabled={buttonDisabled} 
+                    className='btn px-3 py-2 mt-2 scan__button' 
+                    style={btnStyle}
+                >
+                    { buttonDisabled ? "Loading..." : "Scan Profile"}
+                </button>
             </div>
         </>
     )

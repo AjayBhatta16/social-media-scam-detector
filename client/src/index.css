@@ -19,6 +19,10 @@ code {
   transform: scale(1.1);
 }
 
+.scan__button:disabled {
+  background-color: #555 !important;
+}
+
 h1 {
   font-family: 'VT323', monospace;
   font-size: 3rem;
