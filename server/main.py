@@ -28,6 +28,7 @@ default_data = {
 }
 
 CLOUD_SHELL_TESTING_FLAG = False
+NLP_BATCH_FLAG = True
 """
 if CLOUD_SHELL_TESTING_FLAG:
     function_cli = functions_v1.CloudFunctionsServiceClient()
@@ -93,13 +94,13 @@ def twitter_analyze(username):
         })
 
     # classify with tweets
-    multi_tweet_data = {
-        'predictions': []
-    }
-    for tweet in tweets:
+    if NLP_BATCH_FLAG: 
         clf_data = {
-            'text': tweet['text'],
-            'use_knn': False 
+            'use_knn': False,
+            'use_list': True,
+            'tweet_list': [
+                { 'text': tweet['text'] } for tweet in tweets 
+            ]
         }
         serverless_res = call_gcp_serverless(NLP_CLF_URL, clf_data)
         if not serverless_res:
@@ -107,8 +108,27 @@ def twitter_analyze(username):
                 "status": 500,
                 "message": "Internal Server Error"
             })
-        tweet_class = serverless_res.json()['scam_type']
-        multi_tweet_data['predictions'].append(tweet_class)
+        res_data = serverless_res.json()
+        multi_tweet_data = {
+            'predictions': [ pred['scam_type'] for pred in res_data['predictions'] ]
+        }
+    else: 
+        multi_tweet_data = {
+            'predictions': []
+        }
+        for tweet in tweets:
+            clf_data = {
+                'text': tweet['text'],
+                'use_knn': False 
+            }
+            serverless_res = call_gcp_serverless(NLP_CLF_URL, clf_data)
+            if not serverless_res:
+                return json.dumps({
+                    "status": 500,
+                    "message": "Internal Server Error"
+                })
+            tweet_class = serverless_res.json()['scam_type']
+            multi_tweet_data['predictions'].append(tweet_class)
     serverless_res = call_gcp_serverless(MULTI_TWEET_URL, multi_tweet_data)
     if not serverless_res:
         return json.dumps({

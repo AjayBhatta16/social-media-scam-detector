@@ -122,12 +122,35 @@ def nlp_only_pipeline(tweet):
     function_response = json.dumps({"scam_type": nlp_predictions[0]})
     return function_response, 200, {'Content-Type': 'application/json'}
 
+def nlp_only_batch(tweet_list):
+     # Initialize bucket client
+    bucket = storage_client.bucket(BUCKET_NAME)
+
+    # download binaries from cloud storage
+    os.makedirs(os.path.dirname(f'/tmp/distilbert'), exist_ok=True)
+    blob_list = bucket.list_blobs(prefix="distilbert")
+    for blob in blob_list:
+        file_name = blob.name.split("/")[-1]
+        blob.download_to_filename(f'/tmp/{file_name}')
+    
+    # distilbert prediction
+    nlp_model = pipeline(task="text-classification", model=f'/tmp')
+    nlp_predictions_raw = nlp_model([{'text': tweet['text']} for tweet in tweet_list])
+    nlp_predictions = [p['label'] for p in nlp_predictions_raw]
+
+    # http response
+    function_response = json.dumps({"predictions": [{"scam_type": nlp_pred} for nlp_pred in nlp_predictions]})
+    return function_response, 200, {'Content-Type': 'application/json'}
+
 def nlp_classifier(request):
     # Parse request data
     request_json = json.loads(request.json)
     if not request_json or 'data' not in request_json:
         return 'No data provided', 400
-    tweet = request_json['data']
+    req_data = request_json['data']
 
     # check use_knn and route to pipeline
-    return meta_clf_pipeline(tweet) if tweet['use_knn'] else nlp_only_pipeline(tweet)
+    if req_data['use_list']:
+        return nlp_only_batch(req_data['tweet_list'])
+    else: 
+        return meta_clf_pipeline(req_data) if req_data['use_knn'] else nlp_only_pipeline(req_data)
