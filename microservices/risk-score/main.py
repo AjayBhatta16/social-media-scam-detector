@@ -5,9 +5,9 @@ from sklearn.pipeline import Pipeline
 import json
 
 storage_client = storage.Client()
-LOCAL_MODEL_PATH = "/tmp/log-reg-model.joblib"
+LOCAL_MODEL_PATH = "/tmp/risk-score-gboost-model.joblib"
 BUCKET_NAME = "future-campaign-410806.appspot.com"
-BUCKET_MODEL_PATH = "log-reg-model.joblib"
+BUCKET_MODEL_PATH = "risk-score-gboost-model.joblib"
 
 """
 Risk Score Microservice:
@@ -45,8 +45,10 @@ def user_scam_risk(request):
     lr_model = joblib.load(LOCAL_MODEL_PATH)
 
     # prepare data for model prediction
+    if twitter_user['friends_count'] == 0:
+        twitter_user['friends_count'] = 0.001
     twitter_user['follow_ratio'] = twitter_user['followers_count'] / twitter_user['friends_count']
-    model_input_columns = ['verified', 'geo_enabled', 'follow_ratio', 'protected', 'listed_count', 'favourites_count', 'statuses_count']
+    model_input_columns = ['verified', 'follow_ratio', 'protected', 'listed_count', 'statuses_count']
     model_input = pd.DataFrame.from_dict(twitter_user, orient='index').T[model_input_columns]
     
     # return predictions
