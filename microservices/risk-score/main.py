@@ -5,9 +5,9 @@ from sklearn.pipeline import Pipeline
 import json
 
 storage_client = storage.Client()
-LOCAL_MODEL_PATH = "/tmp/risk-score-gboost-model.joblib"
+LOCAL_MODEL_PATH = "/tmp/risk-score-lr-model-v2.joblib"
 BUCKET_NAME = "future-campaign-410806.appspot.com"
-BUCKET_MODEL_PATH = "risk-score-gboost-model.joblib"
+BUCKET_MODEL_PATH = "risk-score-lr-model-v2.joblib"
 
 """
 Risk Score Microservice:

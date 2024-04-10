@@ -56,10 +56,16 @@ export default function ResultsScreen(props) {
                         <h6 style={getPercentSpanStyle(props.results.score)}>This account is {getFraudString(props.results.score)}</h6>   
                     </div>
                 </div>
-                <h2 className="mt-5">Account Type: <span style={scamTypeStyle}>{props.results.scamType}</span></h2>
-                <p style={scamDescStyle} className='para__desc mt-4'>
-                    {props.results.description}
-                </p>
+                { 
+                    props.results.score > 50 && (
+                        <>
+                            <h2 className="mt-5">Account Type: <span style={scamTypeStyle}>{props.results.scamType}</span></h2>
+                            <p style={scamDescStyle} className='para__desc mt-4'>
+                                {props.results.description}
+                            </p>
+                        </> 
+                    )
+                }
             </div>
         </>
     )
