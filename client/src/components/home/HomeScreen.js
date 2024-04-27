@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../common/Header'
 import { getScamType } from '../../utils/scam-types'
+import FEATURE_FLAGS from '../../utils/feature-flags'
 
 export default function HomeScreen(props) {
     const headStyle = {
@@ -12,8 +13,13 @@ export default function HomeScreen(props) {
         backgroundColor: '#0fdce3',
         borderRadius: '20%/50%'
     }
-    const [errTxt, setErrTxt] = useState('')
-    const [buttonDisabled, setButtonDisabled] = useState(false)
+    const [errTxt, setErrTxt] = useState(
+        FEATURE_FLAGS.SERVICE_UNAVAILABLE ? 
+            "Due to funding constraints, we currently cannot pull data from the Twitter API, and our app's services are not available."
+            : ""
+    )
+
+    const [buttonDisabled, setButtonDisabled] = useState(FEATURE_FLAGS.SERVICE_UNAVAILABLE)
     const urlRef = useRef()
     const navigate = useNavigate()
     const handleClick = () => {
